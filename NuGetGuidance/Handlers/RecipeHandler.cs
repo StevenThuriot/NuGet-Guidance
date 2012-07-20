@@ -21,7 +21,6 @@
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using NuGetGuidance.Domain;
 using NuGetGuidance.Interfaces;
@@ -30,9 +29,9 @@ using RESX=NuGetGuidance.Properties.Resources;
 namespace NuGetGuidance.Handlers
 {
     [Export]
-    public class RecipeHandler : IRunnable
+    internal class RecipeHandler : IRunnable
     {
-        [ImportMany()]
+        [ImportMany]
         private IEnumerable<IRecipe> _Recipes;
         
         [Import]

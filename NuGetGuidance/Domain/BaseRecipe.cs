@@ -79,6 +79,10 @@ namespace NuGetGuidance.Domain
             return succeeded;
         }
 
+        /// <summary>
+        /// Executes this instance.
+        /// </summary>
+        /// <returns></returns>
         protected abstract bool Execute();
 
         public virtual int Priority
@@ -86,6 +90,12 @@ namespace NuGetGuidance.Domain
             get { return 50; }
         }
 
+        /// <summary>
+        /// Prompts for a specified value.
+        /// </summary>
+        /// <param name="field">The field.</param>
+        /// <param name="input">The input.</param>
+        /// <returns></returns>
         protected IPromptResult Prompt(string field, string input = "")
         {
             Thread.Sleep(500);
