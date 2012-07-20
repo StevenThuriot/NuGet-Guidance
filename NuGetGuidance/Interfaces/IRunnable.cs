@@ -18,10 +18,12 @@
 
 #endregion
 
+using System.Threading.Tasks;
+
 namespace NuGetGuidance.Interfaces
 {
     public interface IRunnable
     {
-        bool Run();
+        Task<bool> Run();
     }
 }

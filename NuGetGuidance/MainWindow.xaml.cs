@@ -20,6 +20,7 @@
 
 using System;
 using System.ComponentModel;
+using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
@@ -126,13 +127,15 @@ namespace NuGetGuidance
 
             Logger.Log(RESX.StartUp)
                   .Separate()
-                  .Log(Properties.Resources.ComposingRecipes)
-                  .Separate();
+                  .Log(Properties.Resources.ComposingRecipes);
 
             await Task.Delay(800);
 
             var handler = await RecipeCompositionHandler.GenerateHandler(Logger, Prompt);
-            var result = handler.Run();
+
+            Logger.Log(RESX.ComposedRecipes, handler.Count.ToString(CultureInfo.CurrentCulture));
+
+            var result = await handler.Run();
 
             IsExecuting = false;
             IsInError = !result;
@@ -142,11 +145,11 @@ namespace NuGetGuidance
         {
             if (window == null) return;
 
-            var hwnd = FindWindow(null, "Installing...");
+            var hwnd = FindWindow(null, "Installing..."); //Installing new NuGet.
 
             if (hwnd == IntPtr.Zero)
             {
-                hwnd = FindWindow(null, "Updating...");
+                hwnd = FindWindow(null, "Updating..."); //Updating existing NuGet.
                 if (hwnd == IntPtr.Zero) return;
             }
 

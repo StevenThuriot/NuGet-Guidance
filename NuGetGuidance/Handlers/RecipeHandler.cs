@@ -22,6 +22,7 @@ using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using NuGetGuidance.Domain;
 using NuGetGuidance.Interfaces;
 using RESX=NuGetGuidance.Properties.Resources;
@@ -29,25 +30,45 @@ using RESX=NuGetGuidance.Properties.Resources;
 namespace NuGetGuidance.Handlers
 {
     [Export]
-    internal class RecipeHandler : IRunnable
+    public class RecipeHandler : IRunnable
     {
-        [ImportMany]
+        [ImportMany()]
         private IEnumerable<IRecipe> _Recipes;
         
         [Import]
         private ILogHandler _Logger;
 
+        public int Count
+        {
+            get
+            {
+                return _Recipes == null
+                           ? 0
+                           : _Recipes.Count();
+            }
+        }
 
-        public bool Run()
+        public async Task<bool> Run()
         {
             var succeeded = true;
 
-            if (_Recipes.Any())
+            if (_Recipes != null && _Recipes.Any())
             {
+                _Logger.Separate();
+
                 try
                 {
-                    succeeded = _Recipes.OrderBy(x => x.Priority)
-                                        .Aggregate(true, (current, recipe) => current && recipe.Run());
+                    foreach (var recipe in _Recipes.OrderBy(x => x.Priority))
+                    {
+                        if (succeeded)
+                        {
+                            succeeded = await recipe.Run();
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    }
                 }
                 catch
                 {
@@ -67,9 +88,10 @@ namespace NuGetGuidance.Handlers
             else
             {
                 _Logger.Log(RESX.NoRecipesFound, LogLevel.Warning);
+                succeeded = false;
             }
 
-            Thread.Sleep(500);
+            await Task.Delay(500);
 
             return succeeded;
         }

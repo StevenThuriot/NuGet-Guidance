@@ -70,6 +70,15 @@ namespace NuGetGuidance.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Composed {0} recipe(s)..
+        /// </summary>
+        public static string ComposedRecipes {
+            get {
+                return ResourceManager.GetString("ComposedRecipes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Composing Recipes....
         /// </summary>
         public static string ComposingRecipes {

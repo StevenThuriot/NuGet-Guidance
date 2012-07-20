@@ -23,6 +23,7 @@ using System.ComponentModel.Composition;
 using System.Globalization;
 using System.IO;
 using System.Threading;
+using System.Threading.Tasks;
 using NuGetGuidance.Interfaces;
 using NuGetGuidance.Properties;
 
@@ -45,7 +46,7 @@ namespace NuGetGuidance.Domain
         public abstract string Name { get; }
         public abstract string Goal { get; }
 
-        public bool Run()
+        public async Task<bool> Run()
         {            
             Log.Log(Resources.StartingRecipe, Name);
 
@@ -53,7 +54,7 @@ namespace NuGetGuidance.Domain
             try
             {
                 succeeded = Execute();
-                Thread.Sleep(500);
+                await Task.Delay(500);
             }
             catch (Exception e)
             {
@@ -83,9 +84,9 @@ namespace NuGetGuidance.Domain
             get { return 50; }
         }
 
-        protected IPromptResult Prompt(string field, string input = "")
+        protected async Task<IPromptResult> Prompt(string field, string input = "")
         {
-            Thread.Sleep(1000);
+            await Task.Delay(500);
 
             var question = string.Format(CultureInfo.InvariantCulture, Resources.PleaseSupply, field);
             var promptResult = _Prompt(question, input) ?? PromptResult.Empty;
@@ -93,7 +94,7 @@ namespace NuGetGuidance.Domain
             while (promptResult.IsOpen)
             {
                 //Wait for input to finish.
-                Thread.Sleep(500);
+                await Task.Delay(250);
             }
 
             return promptResult;

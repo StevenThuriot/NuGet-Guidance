@@ -31,23 +31,17 @@ namespace NuGetGuidance.Handlers
 {
     internal static class RecipeCompositionHandler
     {
-        private static Task<CompositionContainer> _Container;
+        private static Task<AggregateCatalog> _Catalog;
 
         public static void StartComposing()
         {
-            if (_Container != null) return;
+            if (_Catalog != null) return;
 
-            var compose = new Func<CompositionContainer>(ComposeContainer);
-            _Container = Task.Run(compose);
+            var compose = new Func<AggregateCatalog>(ComposeCatalogs);
+            _Catalog = Task.Run(compose);
         }
 
-        public async static Task<CompositionContainer> Compose()
-        {
-            StartComposing();
-            return await _Container;
-        }
-
-        private static CompositionContainer ComposeContainer()
+        private static AggregateCatalog ComposeCatalogs()
         {
             var assembly = Assembly.GetExecutingAssembly();
 
@@ -59,9 +53,7 @@ namespace NuGetGuidance.Handlers
 
             AddChildDirectories(executable.Directory, aggregateCatalog);
 
-            var container = new CompositionContainer(aggregateCatalog);
-            
-            return container;
+            return aggregateCatalog;
         }
 
         private static void AddChildDirectories(DirectoryInfo appDirectory, AggregateCatalog aggregateCatalog)
@@ -77,7 +69,10 @@ namespace NuGetGuidance.Handlers
 
         public static async Task<RecipeHandler> GenerateHandler(ILogHandler logger, Func<string, string, IPromptResult> prompt)
         {
-            var container = await Compose();
+            StartComposing();
+            var catalog = await _Catalog;
+
+            var container = new CompositionContainer(catalog);
 
             container.ComposeExportedValue(logger);
             container.ComposeExportedValue(prompt);

@@ -58,6 +58,7 @@ namespace NuGetGuidance
 
             if (!InitError)
             {
+                //Creating Catalogs in advance in the threadpool as this takes longest.
                 RecipeCompositionHandler.StartComposing();
             }
         }
