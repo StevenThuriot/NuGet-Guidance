@@ -44,7 +44,7 @@
               
                 <TextBlock Grid.Column="0"
                            Text=" • "
-                           VerticalAlignment="Center"
+                           Margin="0 2 0 0"
                            HorizontalAlignment="Center"
                            Background="{x:Null}"
                            TextWrapping="Wrap"
