@@ -53,7 +53,9 @@ namespace NuGetGuidance.Domain
             bool succeeded;
             try
             {
-                succeeded = Execute();
+                var execute = new Func<bool>(Execute);
+
+                succeeded = await Task.Run(execute);
                 await Task.Delay(500);
             }
             catch (Exception e)
@@ -84,9 +86,9 @@ namespace NuGetGuidance.Domain
             get { return 50; }
         }
 
-        protected async Task<IPromptResult> Prompt(string field, string input = "")
+        protected IPromptResult Prompt(string field, string input = "")
         {
-            await Task.Delay(500);
+            Thread.Sleep(500);
 
             var question = string.Format(CultureInfo.InvariantCulture, Resources.PleaseSupply, field);
             var promptResult = _Prompt(question, input) ?? PromptResult.Empty;
@@ -94,7 +96,7 @@ namespace NuGetGuidance.Domain
             while (promptResult.IsOpen)
             {
                 //Wait for input to finish.
-                await Task.Delay(250);
+                Thread.Sleep(250);
             }
 
             return promptResult;
