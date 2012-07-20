@@ -59,14 +59,10 @@ namespace NuGetGuidance.Handlers
                 {
                     foreach (var recipe in _Recipes.OrderBy(x => x.Priority))
                     {
-                        if (succeeded)
-                        {
-                            succeeded = await recipe.Run();
-                        }
-                        else
-                        {
-                            break;
-                        }
+                        if (await recipe.Run()) continue;
+
+                        succeeded = false;
+                        break;
                     }
                 }
                 catch
