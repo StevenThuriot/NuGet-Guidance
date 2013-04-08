@@ -47,7 +47,12 @@ namespace NuGetGuidance.Handlers
             }
         }
 
-        public async Task<bool> Run()
+        public Task<bool> Run()
+        {
+            return Task.Run(() => Handle());
+        }
+
+        private async Task<bool> Handle()
         {
             var succeeded = true;
 
