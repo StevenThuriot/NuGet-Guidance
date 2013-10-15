@@ -1,4 +1,4 @@
-NuGet Guidance [![Build status](https://ci.appveyor.com/api/projects/status?id=l6icu762e8ph4w1g)](https://ci.appveyor.com/project/Nova_Threading)
+NuGet Guidance [![Build status](https://ci.appveyor.com/api/projects/status?id=nivtc4h9ybci9yu6)](https://ci.appveyor.com/project/Nuget_Guidance)
 ====
 
 Sometimes a NuGet package can contain complex install logic.
