@@ -31,11 +31,13 @@ namespace NuGetGuidance.Handlers
     [Export]
     internal class RecipeHandler : IRunnable
     {
+#pragma warning disable 0649
         [ImportMany]
         private IEnumerable<IRecipe> _Recipes;
         
         [Import]
         private ILogHandler _Logger;
+#pragma warning restore 0649
 
         public int Count
         {

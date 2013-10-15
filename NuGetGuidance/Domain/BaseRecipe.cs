@@ -31,8 +31,10 @@ namespace NuGetGuidance.Domain
 {
     public abstract class BaseRecipe : IRecipe
     {
+#pragma warning disable 0649
         [Import]
         private Func<string, string, IPromptResult> _Prompt;
+#pragma warning restore 0649
 
         [Import]
         protected ILogHandler Log { get; private set; }
